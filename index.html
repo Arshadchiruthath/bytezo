@@ -824,10 +824,278 @@
     .about .card h3 {
       line-height: 1.25
     }
+
+    /* ============================================================
+       LIVE MOTIONS & DYNAMIC INTERACTIONS
+       ============================================================ */
+    
+    /* Header dynamic scroll glass */
+    header {
+      transition: background-color .35s ease, backdrop-filter .35s ease, border-color .35s ease, box-shadow .35s ease;
+    }
+    header.scrolled {
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Circuit SVG Live Energy Flow */
+    .circuit path {
+      stroke-dasharray: 14 8;
+      animation: circuitFlow 18s linear infinite;
+    }
+    @keyframes circuitFlow {
+      to {
+        stroke-dashoffset: -360;
+      }
+    }
+    .circuit g circle {
+      animation: circuitPulse 2.4s ease-in-out infinite alternate;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    .circuit g circle:nth-child(odd) {
+      animation-duration: 1.8s;
+      animation-delay: 0.4s;
+    }
+    .circuit g circle:nth-child(3n) {
+      animation-duration: 3s;
+      animation-delay: 0.9s;
+    }
+    @keyframes circuitPulse {
+      0% {
+        transform: scale(0.9);
+        opacity: 0.75;
+      }
+      100% {
+        transform: scale(1.35);
+        opacity: 1;
+        filter: drop-shadow(0 0 6px #fff);
+      }
+    }
+
+    /* Hero Card 3D Tilt container */
+    .hero-card {
+      transition: transform .18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .3s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    /* Row hover interaction */
+    .row {
+      transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1), border-color .3s ease;
+    }
+    .row:hover {
+      transform: translateX(10px);
+    }
+    .row li {
+      transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1), background-color .25s ease, color .25s ease;
+    }
+    .row li:hover {
+      transform: translateY(-3px) scale(1.06);
+    }
+
+    /* Interactive pills */
+    .pill span {
+      transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1), background-color .25s ease, color .25s ease, border-color .25s ease;
+    }
+    .pill span:hover {
+      transform: translateY(-2px) scale(1.05);
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    /* Scroll reveal transitions */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .8s cubic-bezier(0.16, 1, 0.3, 1), transform .8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Live Binary Marquee Ticker */
+    .bin {
+      background: var(--black);
+      color: var(--red);
+      border-top: 2px solid var(--red);
+      padding: 16px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      font: 1.1rem ui-monospace, Menlo, Consolas, monospace;
+      letter-spacing: .15em;
+      position: relative;
+      display: flex;
+    }
+    .bin-track {
+      display: flex;
+      flex-shrink: 0;
+      animation: binScroll 28s linear infinite;
+      will-change: transform;
+    }
+    .bin:hover .bin-track {
+      animation-play-state: paused;
+    }
+    @keyframes binScroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ============================================================
+       EXCITING CUSTOM CURSOR
+       ============================================================ */
+    @media (hover: hover) and (pointer: fine) {
+      body {
+        cursor: none;
+      }
+      a, button, input, textarea, select, .btn, .row, .card, .hero-card, .pill span, .row li {
+        cursor: none;
+      }
+
+      #cursor-dot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 8px;
+        height: 8px;
+        background: var(--red);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 99999;
+        transform: translate(-50%, -50%);
+        transition: width .2s ease, height .2s ease, background-color .2s ease, opacity .25s ease;
+        box-shadow: 0 0 10px var(--red), 0 0 20px rgba(232, 66, 66, 0.7);
+        opacity: 0;
+      }
+
+      #cursor-ring {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 36px;
+        height: 36px;
+        border: 2px solid rgba(232, 66, 66, 0.75);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 99998;
+        transform: translate(-50%, -50%);
+        transition: width .25s cubic-bezier(0.16, 1, 0.3, 1), height .25s cubic-bezier(0.16, 1, 0.3, 1), border-color .25s ease, background-color .25s ease, opacity .25s ease;
+        background: rgba(232, 66, 66, 0.05);
+        opacity: 0;
+      }
+
+      body.cursor-active #cursor-dot,
+      body.cursor-active #cursor-ring {
+        opacity: 1;
+      }
+
+      /* Hover on interactive items */
+      body.cursor-hover #cursor-dot {
+        width: 12px;
+        height: 12px;
+        background: #ffffff;
+        box-shadow: 0 0 14px #ffffff;
+      }
+
+      body.cursor-hover #cursor-ring {
+        width: 62px;
+        height: 62px;
+        border-color: var(--red);
+        background: rgba(232, 66, 66, 0.22);
+        box-shadow: 0 0 30px rgba(232, 66, 66, 0.5);
+      }
+
+      /* Hover on cards & media */
+      body.cursor-card #cursor-ring {
+        width: 76px;
+        height: 76px;
+        border-color: rgba(255, 255, 255, 0.85);
+        background: rgba(232, 66, 66, 0.28);
+        mix-blend-mode: difference;
+      }
+
+      /* Click shockwave ripple */
+      .cursor-ripple {
+        position: fixed;
+        border: 2px solid var(--red);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 99997;
+        transform: translate(-50%, -50%) scale(0.2);
+        animation: cursorRipple .5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+      }
+
+      @keyframes cursorRipple {
+        0% {
+          width: 8px;
+          height: 8px;
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(0.4);
+        }
+        100% {
+          width: 84px;
+          height: 84px;
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(1.6);
+        }
+      }
+
+      /* Motion particle spark trail */
+      .cursor-spark {
+        position: fixed;
+        width: 5px;
+        height: 5px;
+        background: var(--red);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 99996;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 8px var(--red);
+        animation: cursorSpark .55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      @keyframes cursorSpark {
+        0% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -50%) translateY(16px) scale(0.2);
+        }
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      .circuit path,
+      .circuit g circle,
+      .bin-track {
+        animation: none;
+      }
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      .row:hover {
+        transform: none;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <div id="cursor-dot" aria-hidden="true"></div>
+  <div id="cursor-ring" aria-hidden="true"></div>
   <header>
     <div class="wrap bar">
       <a href="#top" aria-label="Bytezo home"><img
@@ -1147,8 +1415,12 @@
             href="mailto:bytezoofficial@gmail.com">Email us</a><a class="btn" href="tel:+919447071972">Call us</a></div>
       </div>
     </section>
-    <div class="bin" aria-hidden="true">01000010 01111001 01110100 01100101 01111010 01101111 01000010 01111001 01110100
-      01100101 01111010 01101111</div>
+    <div class="bin" aria-hidden="true">
+      <div class="bin-track">
+        <span>01000010 01111001 01110100 01100101 01111010 01101111 &bull; BYTEZO DIGITAL &bull; 01000010 01111001 01110100 01100101 01111010 01101111 &bull; BUILD CONNECT GROW &bull;&nbsp;</span>
+        <span>01000010 01111001 01110100 01100101 01111010 01101111 &bull; BYTEZO DIGITAL &bull; 01000010 01111001 01110100 01100101 01111010 01101111 &bull; BUILD CONNECT GROW &bull;&nbsp;</span>
+      </div>
+    </div>
   </main>
 
   <footer>
@@ -1159,6 +1431,201 @@
       <p>One partner for every digital need. Your idea is the beginning. Let’s turn it into impact.</p>
     </div>
   </footer>
+
+  <!-- Live Motions & Interactive Cursor Script -->
+  <script>
+    (function () {
+      'use strict';
+
+      // 1. Dynamic Header Scroll Glass
+      const header = document.querySelector('header');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 40) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      }, { passive: true });
+
+      // 2. Scroll Reveal Animations (IntersectionObserver)
+      const revealElements = document.querySelectorAll(
+        '.statement .split, .about .card, .about > div, .two > div, .svc .row, .steps li, .why div, .serve div, .vals li, .fut'
+      );
+      revealElements.forEach(el => el.classList.add('reveal'));
+
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      revealElements.forEach((el, i) => {
+        const delay = (i % 5) * 0.08;
+        el.style.transitionDelay = `${delay}s`;
+        revealObserver.observe(el);
+      });
+
+      // 3. Hero Card Interactive 3D Perspective Tilt
+      const heroVisual = document.querySelector('.hero-visual');
+      const heroCard = document.querySelector('.hero-card');
+
+      if (heroVisual && heroCard && window.matchMedia('(hover: hover)').matches) {
+        let isHovered = false;
+
+        heroVisual.addEventListener('mouseenter', () => {
+          isHovered = true;
+        });
+
+        heroVisual.addEventListener('mousemove', (e) => {
+          if (!isHovered) return;
+          const rect = heroCard.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          const rotX = -(y / (rect.height / 2)) * 12;
+          const rotY = (x / (rect.width / 2)) * 12;
+          heroCard.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`;
+        });
+
+        heroVisual.addEventListener('mouseleave', () => {
+          isHovered = false;
+          heroCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
+      }
+
+      // 4. Magnetic Buttons
+      const magneticBtns = document.querySelectorAll('.btn');
+      if (window.matchMedia('(hover: hover)').matches) {
+        magneticBtns.forEach(btn => {
+          btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.22}px, ${y * 0.22}px) translateY(-2px)`;
+          });
+          btn.addEventListener('mouseleave', () => {
+            btn.style.transform = '';
+          });
+        });
+      }
+
+      // 5. Live Binary Stream Flickering Data
+      const binTrack = document.querySelector('.bin-track');
+      if (binTrack) {
+        setInterval(() => {
+          const spans = binTrack.querySelectorAll('span');
+          if (spans.length > 0) {
+            spans.forEach(span => {
+              const text = span.textContent;
+              const idx = Math.floor(Math.random() * text.length);
+              if (text[idx] === '0') {
+                span.textContent = text.substring(0, idx) + '1' + text.substring(idx + 1);
+              } else if (text[idx] === '1') {
+                span.textContent = text.substring(0, idx) + '0' + text.substring(idx + 1);
+              }
+            });
+          }
+        }, 1200);
+      }
+
+      // 6. Exciting Custom Cursor System
+      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+        if (!dot || !ring) return;
+
+        let mouseX = -100, mouseY = -100;
+        let ringX = -100, ringY = -100;
+        let lastSparkTime = 0;
+
+        document.body.classList.add('cursor-active');
+
+        window.addEventListener('mousemove', (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+
+          dot.style.left = `${mouseX}px`;
+          dot.style.top = `${mouseY}px`;
+
+          // Micro particle spark trail when moving
+          const now = Date.now();
+          if (now - lastSparkTime > 50) {
+            lastSparkTime = now;
+            createSpark(mouseX, mouseY);
+          }
+        }, { passive: true });
+
+        // Smooth physics-based ring follower loop
+        function updateRing() {
+          ringX += (mouseX - ringX) * 0.18;
+          ringY += (mouseY - ringY) * 0.18;
+          ring.style.left = `${ringX.toFixed(2)}px`;
+          ring.style.top = `${ringY.toFixed(2)}px`;
+          requestAnimationFrame(updateRing);
+        }
+        requestAnimationFrame(updateRing);
+
+        // Click Ripple Effect
+        window.addEventListener('mousedown', (e) => {
+          ring.style.transform = 'translate(-50%, -50%) scale(0.7)';
+          createRipple(e.clientX, e.clientY);
+        });
+
+        window.addEventListener('mouseup', () => {
+          ring.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+
+        // Hide when mouse leaves window
+        document.addEventListener('mouseleave', () => {
+          document.body.classList.remove('cursor-active');
+        });
+
+        document.addEventListener('mouseenter', () => {
+          document.body.classList.add('cursor-active');
+        });
+
+        // Interactive hover targets
+        const hoverTargets = document.querySelectorAll('a, button, .btn, .pill span, .row li');
+        hoverTargets.forEach(el => {
+          el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+          el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+
+        const cardTargets = document.querySelectorAll('.hero-card, .card, .fut, .code, .row');
+        cardTargets.forEach(el => {
+          el.addEventListener('mouseenter', () => document.body.classList.add('cursor-card'));
+          el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-card'));
+        });
+
+        // Helper: Create click ripple
+        function createRipple(x, y) {
+          const ripple = document.createElement('div');
+          ripple.className = 'cursor-ripple';
+          ripple.style.left = `${x}px`;
+          ripple.style.top = `${y}px`;
+          document.body.appendChild(ripple);
+          setTimeout(() => ripple.remove(), 500);
+        }
+
+        // Helper: Create micro spark
+        function createSpark(x, y) {
+          const spark = document.createElement('div');
+          spark.className = 'cursor-spark';
+          const offsetAngle = Math.random() * Math.PI * 2;
+          const dist = Math.random() * 8;
+          spark.style.left = `${x + Math.cos(offsetAngle) * dist}px`;
+          spark.style.top = `${y + Math.sin(offsetAngle) * dist}px`;
+          document.body.appendChild(spark);
+          setTimeout(() => spark.remove(), 550);
+        }
+      }
+    })();
+  </script>
 </body>
 
 </html>
